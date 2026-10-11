@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leaf Disease Detector · Pramod Singh Gaira</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="bg"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i></div>
+<div id="leaves" aria-hidden="true"></div>
+
+<nav class="nav"><span class="logo">🌿 LeafAI</span><span class="pill">by <b>Pramod Singh Gaira</b></span></nav>
+
+<header class="hero">
+  <span class="chip">🎓 BCA · 1st Semester · EVS Project</span>
+  <h1>Leaf Disease <em>Detector</em></h1>
+  <p class="sub">Snap or upload a leaf. Our AI checks the photo, finds the problem and tells you how to heal your plant.</p>
+  <div class="credit">
+    <span class="credit-k">Created by</span>
+    <b class="credit-name" id="owner">Pramod Singh Gaira</b>
+    <span class="credit-u">BCA 1st Semester · EVS Project · SSJ University (SSJU), Almora</span>
+  </div>
+  <ol class="steps"><li><i>1</i>Upload</li><li><i>2</i>Quality check</li><li><i>3</i>AI diagnosis</li><li><i>4</i>PDF report</li></ol>
+</header>
+
+<main>
+  <section class="card" id="inputCard">
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="browse">📁 Browse</button>
+      <button class="tab" data-tab="camera">📷 Camera</button>
+    </div>
+    <div id="pane-browse" class="pane">
+      <label class="drop" id="drop">
+        <input type="file" id="file" accept="image/*" hidden>
+        <div class="drop-icon">🌱</div>
+        <strong>Drop a leaf photo here</strong><span>or click to browse · JPG, PNG, WEBP</span>
+      </label>
+    </div>
+    <div id="pane-camera" class="pane" hidden>
+      <div class="cam"><video id="video" autoplay playsinline muted></video><div class="cam-msg" id="camMsg">Starting camera…</div></div>
+      <div class="row">
+        <button class="btn primary" id="snap">📸 Capture</button>
+        <label class="btn ghost">Use phone camera app<input type="file" id="fileCam" accept="image/*" capture="environment" hidden></label>
+      </div>
+    </div>
+    <ul class="tips"><li>One leaf, filling the frame</li><li>Daylight, no flash or glare</li><li>Hold steady, keep it sharp</li></ul>
+  </section>
+
+  <section class="card hidden" id="previewCard">
+    <div class="grid2">
+      <figure class="scanbox"><img id="preview" alt="Your leaf"><span class="scan"></span><figcaption>Your image</figcaption></figure>
+      <div id="checks"><div class="status"><span class="spin"></span> Checking image…</div></div>
+    </div>
+    <div class="row" id="keyRow" hidden><input type="password" id="apiKey" placeholder="Groq API key (gsk_…)" autocomplete="off"></div>
+    <div class="row">
+      <button class="btn primary" id="analyze" hidden>🔍 Analyze leaf</button>
+      <button class="btn ghost" id="reset">↺ New photo</button>
+    </div>
+  </section>
+
+  <section class="hidden" id="results">
+    <div class="metrics">
+      <div class="metric"><span>Plant</span><b id="mPlant">-</b></div>
+      <div class="metric"><span>Condition</span><b id="mCond">-</b></div>
+      <div class="metric conf"><span>Confidence</span>
+        <div class="ringwrap"><svg viewBox="0 0 120 120"><circle class="rt" cx="60" cy="60" r="52"/><circle class="rf" id="ring" cx="60" cy="60" r="52"/></svg><b id="mConf">-</b></div></div>
+      <div class="metric"><span>Severity (typical)</span><b id="mSev">-</b></div>
+    </div>
+    <div class="status warn hidden" id="lowConf">Low confidence. Retake the photo or consult a local agriculture expert.</div>
+
+    <div class="card">
+      <div class="tabs" id="infoTabs">
+        <button class="tab active" data-info="overview">Overview</button>
+        <button class="tab" data-info="symptoms">Symptoms</button>
+        <button class="tab" data-info="treatment">Treatment</button>
+        <button class="tab" data-info="prevention">Prevention</button>
+        <button class="tab" data-info="explanation">AI Explanation</button>
+      </div>
+      <div id="infoBody" class="info"></div>
+    </div>
+
+    <div class="card"><h2>Top Predictions</h2><div id="preds"></div></div>
+
+    <div class="card">
+      <h2>Grad-CAM style heatmap</h2>
+      <div class="grid2">
+        <figure><img id="imgOrig" alt="Original"><figcaption>Original</figcaption></figure>
+        <figure><img id="imgHeat" alt="Heatmap"><figcaption id="heatCap">Affected-area map</figcaption></figure>
+      </div>
+      <p class="note">Groq models run behind an API, so true Grad-CAM isn't available. This map comes from colour analysis and highlights non-healthy tissue (red = most affected).</p>
+    </div>
+
+    <div class="card row between">
+      <div><h2>Report in PDF</h2><p class="note">Images, diagnosis, treatment and prevention.</p></div>
+      <button class="btn primary" id="pdf">📄 Download PDF report</button>
+    </div>
+  </section>
+  <div class="toast hidden" id="toast"></div>
+</main>
+
+<footer>
+  <div class="foot-card"><b id="owner2">Pramod Singh Gaira</b><span>BCA 1st Semester · EVS Project · SSJU, Almora</span></div>
+  <p>AI estimate only. Confirm with an agriculture expert before treating.</p>
+</footer>
+<script src="/static/app.js"></script>
+</body>
+</html>

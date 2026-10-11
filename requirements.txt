@@ -1,0 +1,7 @@
+flask>=3.0
+groq>=0.13
+pillow>=10.0
+numpy>=1.26
+fpdf2>=2.8
+python-dotenv>=1.0
+gunicorn>=22.0

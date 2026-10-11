@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: leaf-disease-detector
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn server:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false   # you type the value in the Render dashboard, it is never stored in git
